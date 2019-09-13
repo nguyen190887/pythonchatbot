@@ -26,9 +26,10 @@ def webhook():
     except NameError:
         ml_prediction = Prediction(MODEL_DIR)
         ml_prediction.load_model()
-    answer = ''    
+    answer = ''
     if request.method == 'POST':
         try:
+            print(json.dumps(request.data))
             data = json.loads(request.data)
             bot_id = data['recipient']['id']
             bot_name = data['recipient']['name']
@@ -37,7 +38,7 @@ def webhook():
             sender = data['conversation']['id']
             text = data['text']
 
-            bot.send_message(bot_id, bot_name, recipient, service, sender, 
+            bot.send_message(bot_id, bot_name, recipient, service, sender,
                 ml_prediction.response(text, sender))
         except Exception as e:
             print(e)
